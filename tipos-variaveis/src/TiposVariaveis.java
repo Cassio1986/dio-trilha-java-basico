@@ -1,21 +1,18 @@
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 
 public class TiposVariaveis {
 
     public static void main(String[] args) throws Exception {
 
-        String dataAtualFormatada = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(System.currentTimeMillis());
+        String mensagem = "Valor de saida é: ";
 
-        String mensagem = "Bom dia Lara! ";
-        int hora = Integer.parseInt(dataAtualFormatada.substring(11, 13));
+        Double salarioMinimo = 2500.00;
 
-        if ((hora <= 12) && (hora > 18)) {
-            mensagem = "Boa tarde Lara";
-        } else if (hora >= 18) {
-            mensagem = "Boa noite Lara";
-        }
+        short numeroCurto = 1;
+        int numeroNormal = numeroCurto;
+        short numeroCurto2 = (short) numeroNormal;
 
-        System.out.println(mensagem);
+        final double VALOR_DE_PI = 3.14;
+
+        System.out.println(mensagem + VALOR_DE_PI);
     }
 }
