@@ -14,7 +14,6 @@ public class Contador {
         {
             System.out.println("O valor do parametro Um e maior que o valor do parametro Dois");
         }
-
     }
 
     static void contar(int parametroUm, int parametroDois) throws ParametrosInvalidosException {
