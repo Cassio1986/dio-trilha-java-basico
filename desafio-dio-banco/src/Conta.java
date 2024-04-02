@@ -1,19 +1,37 @@
-public class Conta {
-
-    protected static final int AGENCIA_PADRAO = 1;
-    private static int SEQUENCIAL = 1;
-
-    public Conta(Cliente cliente) {
-        this.agencia = AGENCIA_PADRAO;
-        this.numero = SEQUENCIAL++;
-        this.cliente = cliente;
-    }
-
+public abstract class Conta {
     protected int agencia;
     protected int numero;
     protected double saldo;
-    protected Cliente cliente;
-    protected double limite;
+    private static final int AGENCIA_PADRAO = 00001;
+    private static int SEQUENCIAL = 1;
+
+    public Conta() {
+        this.agencia = AGENCIA_PADRAO;
+        this.numero = SEQUENCIAL++;
+    }
+
+    public void sacar(double valor) {
+        saldo -= valor;
+
+    }
+
+    public void depositar(double valor) {
+        saldo += valor;
+
+    }
+
+    public void trasnferir(double valor, Conta conta) {
+        this.sacar(valor);
+        conta.depositar(valor);
+
+    }
+
+    public void imprimirDadosConta()
+    {
+        System.out.println(String.format("Agencia: %d", this.agencia));
+        System.out.println(String.format("Numero: %d", this.numero));
+        System.out.println(String.format("Saldo: %.2f", this.saldo));
+    }
 
     public int getAgencia() {
         return agencia;
@@ -26,36 +44,4 @@ public class Conta {
     public double getSaldo() {
         return saldo;
     }
-
-    public void sacar(double valor) {
-        saldo -= valor;
-
-    }
-
-    public void depositar(double valor) {
-        saldo += valor;
-    }
-
-    public void chequeEspecial(){
-        limite = saldo * 0.5;
-    }
-
-    public void transferir(double valor, Conta contaDestino) {
-        this.sacar(valor);
-        contaDestino.depositar(valor);
-
-    }
-
-    public void imprimirExtrato() {
-        chequeEspecial();
-        System.err.println(String.format("Titular: %s", this.cliente.getNome()));
-        System.out.println(String.format("CPF: %s", this.cliente.getCPF()));
-        System.out.println(String.format("Agência: %d", this.agencia));
-        System.out.println(String.format("Conta: %d", this.numero));
-        System.out.println(String.format("Saldo: %.2f", this.saldo));
-        System.out.println(String.format("Cheque especial: %.2f",this.limite));
-        System.out.println();
-        
-    }
-
 }

@@ -1,102 +1,151 @@
 import java.util.Scanner;
 
 public class Main {
+    static ContaCorrente cc = new ContaCorrente();
+    static ContaPoupanca poupanca = new ContaPoupanca();
 
     public static void main(String[] args) {
+        if (cc.saldo == 0)
+            cc.depositar(200);
+        if (poupanca.saldo == 0)
+            poupanca.depositar(100);
 
-        terminalBancario();
+        terminal();
     }
 
-    public static void terminalBancario() {
-        Cliente cliente = new Cliente();
-        cliente.setNome("Cassio Fernandes");
-        cliente.setCPF("107.643.947-03");
+    public static void terminal() {
 
-        Conta cc = new ContaCorrente(cliente);
-        Conta cp = new ContaPoupanca(cliente);
-        cc.saldo = 1150;
-        cp.saldo = 3500;
+        System.out.println("==== Terminal ==== ");
+        System.out.println("1 - Extrato");
+        System.out.println("2 - Deposito");
+        System.out.println("3 - Sacar");
+        System.out.println("4 - Transferir");
+        System.out.println("5 - Sair Sessão");
+        Scanner scanner = new Scanner(System.in);
+        int opcaoMenu = scanner.nextInt();
 
-        try (Scanner scanner = new Scanner(System.in)) {
-            System.out.println("Conta Corrente = 1 ou Conta Poupança = 2");
-            int tipoConta = scanner.nextInt();
-            if (tipoConta == 0 || tipoConta >= 3) {
-                System.out.println("Valor invádio");
-                terminalBancario();
-            }
+        if (opcaoMenu == 1) {
+            extrato();
+            System.out.println();
+            terminal();
+        }
+        if (opcaoMenu == 2) {
+            depositar();
+            System.out.println();
+            terminal();
+        }
+        if (opcaoMenu == 3) {
+            sacar();
+            System.out.println();
+            terminal();
+        }
+        if (opcaoMenu == 4) {
+            trasnferir();
+            System.out.println();
+            terminal();
+        }
+        if (opcaoMenu == 5) {
+            System.out.println("Sessão encerrada!");
+        } else if (opcaoMenu <=0 || opcaoMenu >= 6){
+            System.out.println("Opção XXX inválida!");
+            terminal();
+        }
+    }
 
-            System.out.println("=========Terminal=========");
-            System.out.println("1 - Menu Banco");
-            System.out.println("2 - Depositor");
-            System.out.println("3 - Transferir");
-            System.out.println("4 - Imprimir Extrato");
-            System.out.println("5 - Sair");
-            int opcao = scanner.nextInt();
+    public static void extrato() {
+        System.out.println("=== Selecione o tipo da conta ===");
+        ;
+        System.out.println("1 -  Conta Corrente");
+        System.out.println("2 -  Conta Poupança");
+        Scanner tconta = new Scanner(System.in);
+        int tipoConta = tconta.nextInt();
 
-            switch (opcao) {
-                case 1:
-                    Banco.menuBanco();
-                    terminalBancario();
-                    break;
+        if (tipoConta == 1) {
+            cc.imprimirExtrato();
+        }
+        if (tipoConta == 2) {
+            poupanca.imprimirExtrato();
+        } else if (tipoConta < 1 || tipoConta > 2) {
+            System.out.println("Opção inválida");
+            extrato();
+        }
+    }
 
-                case 2:
-                    System.out.println("=====Deposito=====");
-                    System.out.println("1 - Conta Corrente");
-                    System.out.println("2 - Conta Poupança");
-                    int deposito = scanner.nextInt();
-                    System.out.println("Valor: ");
-                    double valor = scanner.nextDouble();
-                    if (deposito == 1) {
-                        System.out.println("Saldo Conta Corrente");
-                        cc.depositar(valor);
-                        System.out.println("");
-                        terminalBancario();
-                    } else {
-                        System.out.println("Saldo Conta Poupança");
-                        cp.depositar(valor);
-                        System.out.println("");
-                    }
-                    terminalBancario();
-                    break;
-                case 3:
-                    System.out.println("=====Transferir======");
-                    System.out.println("Informe o valor:");
-                    double transferir = scanner.nextDouble();
+    public static void depositar() {
+        System.out.println("=== Selecione o tipo da conta ===");
+        System.out.println("1 -  Conta Corrente");
+        System.out.println("2 -  Conta Poupança");
+        Scanner tconta = new Scanner(System.in);
+        int tipoConta = tconta.nextInt();
+        System.out.println("Informe o valor depositado:");
+        double depositoValor = tconta.nextDouble();
 
-                    if (tipoConta == 1) {
-                        cc.transferir(transferir, cp);
-                        System.out.printf("Saldo Conta corrente: R$ %.2f", cc.saldo);
-                        System.err.println("");
-                        System.out.printf("Saldo Conta Poupança: R$ %.2f", cp.saldo);
-                    } else {
-                        cp.transferir(transferir, cc);
-                        System.out.printf("Saldo Conta Poupança: R$ %.2f", cp.saldo);
-                        System.err.println("");
-                        System.out.printf("Saldo Conta corrente: R$ %.2f", cc.saldo);
-                    }
-                    terminalBancario();
-                    break;
-                case 4:
-                    System.out.println("=====Extrato=====");
-                    if (tipoConta == 1) {
-                        System.out.println("      Dados");
-                        System.out.println(" Conta Corrente");
-                        cc.imprimirExtrato();
-                    } else {
-                        System.out.println("      Dados");
-                        System.out.println(" Conta Poupança");
-                        cp.imprimirExtrato();
-                    }
-                    terminalBancario();
-                    break;
-                case 5:
-                    System.out.println("Sessão encerrada");
-                    break;
-                default:
-                    System.err.println("Opção inválida!");
-                    terminalBancario();
-                    break;
-            }
+        if (tipoConta == 1) {
+            System.out.println(String.format("Saldo anterior da Conta Corrente: %.2f", cc.saldo));
+            cc.depositar(depositoValor);
+            System.out.println(String.format("Saldo Atual da Conta Corrente: %.2f", cc.saldo));
+
+        }
+        if (tipoConta == 2) {
+            System.out.println(String.format("Saldo anterior da Conta Poupança: %.2f", poupanca.saldo));
+            poupanca.depositar(depositoValor);
+            System.out.println(String.format("Saldo Atual da Conta Poupança: %.2f", poupanca.saldo));
+        } else if (tipoConta <=0 || tipoConta >= 3) {
+            System.out.println("Opção inválida");
+            
+        }
+
+    }
+
+    public static void sacar() {
+        System.out.println("=== Selecione o tipo da conta ===");
+        System.out.println("1 -  Conta Corrente");
+        System.out.println("2 -  Conta Poupança");
+        Scanner tconta = new Scanner(System.in);
+        int tipoConta = tconta.nextInt();
+        System.out.println("Informe o valor sacado");
+        double sacarValor = tconta.nextDouble();
+
+        if (tipoConta == 1) {
+            System.out.println(String.format("Saldo anterior da Conta Corrente: %.2f", cc.saldo));
+            cc.sacar(sacarValor);
+            System.out.println(String.format("Saldo Atual da Conta Corrente: %.2f", cc.saldo));
+
+        }
+        if (tipoConta == 2) {
+            System.out.println(String.format("Saldo anterior da Conta Poupança: %.2f", poupanca.saldo));
+            poupanca.sacar(sacarValor);
+            System.out.println(String.format("Saldo Atual da Conta Poupança: %.2f", poupanca.saldo));
+        } else if (tipoConta <=0 || tipoConta >= 3) {
+            System.out.println("Opção inválida");
+            
+        }
+
+    }
+
+
+    public static void trasnferir() {
+        System.out.println("=== Selecione o tipo da conta ===");
+        System.out.println("1 -  Conta Corrente");
+        System.out.println("2 -  Conta Poupança");
+        Scanner tconta = new Scanner(System.in);
+        int tipoConta = tconta.nextInt();
+        System.out.println("Informe o valor sacado");
+        double tranferirValor = tconta.nextDouble();
+
+        if (tipoConta == 1) {
+            System.out.println(String.format("Saldo anterior da Conta Corrente: %.2f", cc.saldo));
+            cc.trasnferir(tranferirValor, poupanca);
+            System.out.println(String.format("Saldo Atual da Conta Corrente: %.2f", cc.saldo));
+
+        }
+        if (tipoConta == 2) {
+            System.out.println(String.format("Saldo anterior da Conta Poupança: %.2f", poupanca.saldo));
+            poupanca.trasnferir(tranferirValor, cc);
+            System.out.println(String.format("Saldo Atual da Conta Poupança: %.2f", poupanca.saldo));
+        } else if (tipoConta <=0 || tipoConta >= 3) {
+            System.out.println("Opção inválida");
+            
         }
 
     }
